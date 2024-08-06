@@ -21,6 +21,23 @@ steps:
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     goals: 'package'
 
+- task: SonarQubePrepare@6
+  inputs:
+    SonarQube: 'sonartester'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: 'sonar'
+    cliProjectName: 'sonar'
+    cliSources: '.'
+    extraProperties: |
+      # Additional properties that will be passed to the scanner, 
+      # Put one key=value per line, example:
+      # sonar.exclusions=**/*.bin
+      sonar.java.binaries=,
+
+      - task: SonarQubeAnalyze@6
+        inputs:
+          jdkversion: 'JAVA_HOME_17_X64'
 - task: SonarQubePublish@6
   inputs:
     pollingTimeoutSec: '300'
